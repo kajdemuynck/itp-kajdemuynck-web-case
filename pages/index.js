@@ -1,18 +1,43 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
 import { useState } from 'react';
+import { request } from "../lib/datocms";
+import ListOfRecipes from '../components/ListOfRecipes';
 
-const Home = () => {
-  // testdata
-  const data = [{
-    name: 'Spaghetti bolognese',
-    image: 'images/recipe.jpg',
-    ingredients: ['onion', 'salt', 'pepper']
-  }];
+const HOMEPAGE_QUERY = `query HomePage {
+  allRecipes(orderBy: title_ASC) {
+    slug
+    title
+    image {
+      responsiveImage(imgixParams: {h: "80", w: "80", fit: crop}) {
+        src
+        srcSet
+        webpSrcSet
+        width
+        title
+        height
+        base64
+        alt
+        aspectRatio
+        sizes
+      }
+    }
+  }
+}`;
 
-  const sortOptions = ['az', 'za', 'time'];
-  const [sortSelected, setSortSelected] = useState(0);
+export const getStaticProps = async () => {
+  const data = await request({
+    query: HOMEPAGE_QUERY,
+    variables: { limit: 10 }
+  });
+  return {
+    props: { data }
+  };
+}
+
+const Home = ({ data }) => {
+  console.log(data);
   const [inputSearch, setInputSearch] = useState('');
 
   // When the user types in the searchbar
@@ -20,13 +45,6 @@ const Home = () => {
     const value = e.currentTarget.value;
     setInputSearch(value);
   }
-
-  // Changing the order of the recipes in the list
-  const handleClickSort = () => {
-    let value = sortSelected + 1;
-    value %= sortOptions.length;
-    setSortSelected(value);
-  };
 
   return (
     <div className={styles.container}>
@@ -59,27 +77,7 @@ const Home = () => {
         </section>
 
         {/* Recipes */}
-        <section className={styles.recipes__container}>
-          <div className={styles.subtitle__container}>
-            <h2 className={styles.subtitle}>Recipes</h2>
-            <div className={styles.section__options}>
-              <button className={styles.btn__sort} onClick={handleClickSort}>
-                <Image src={`/images/icon-sort-${sortOptions[sortSelected]}.svg`} alt="sort" width={32} height={32} />
-              </button>
-            </div>
-          </div>
-          <ul className={styles.recipes}>
-            {data.map((recipe, index) => (
-              <li className={styles.recipe} key={index}>
-                <div className={styles.recipe__img}>
-                  <Image src={`/${recipe.image}`} alt="recipe" width={80} height={80} />
-                </div>
-                <p className={styles.recipe__name}>{recipe.name}</p>
-                <p className={styles.recipe__ingredients}>{recipe.ingredients.join(', ')}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <ListOfRecipes data={data} />
       </main>
 
       {/* Footer */}
