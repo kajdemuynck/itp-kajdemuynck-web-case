@@ -28,39 +28,44 @@ const Recipe = () => {
       <Head>
         <title>{recipe.name}</title>
       </Head>
-      <main>
+      <main className={styles.main}>
         <button className={styles.btn__back}></button>
-        <Image className={styles.img} src="/vercel.svg" alt="" width={360} height={240} />
-        <h1 className={styles.title}>{recipe.name}</h1>
-        <ul className={styles.extra}>
-          <li className={styles.time}>
-            <Image className={styles.time__img} src="/vercel.svg" alt="" width={40} height={40} />
-            <p className={styles.time__txt}>{recipe.time} min.</p>
-          </li>
-          <li className={styles.servings}>
-            <Image className={styles.servings__img} src="/vercel.svg" alt="" width={40} height={40} />
-            <p className={styles.servings__txt}>{recipe.servings} serves</p>
-          </li>
-        </ul>
-        <div className={styles.info}>
-          <section className={styles.ingredients__container}>
-            <h2 className={styles.subtitle}>What you will need</h2>
-            <ul className={styles.ingredients}>
-              {ingredients.map(ingredient => (
-                <li className={styles.ingredient} key={ingredient.name}>
-                  <p className={styles.ingredient__amount}>{ingredient.amount}{ingredient.unit.abbrevation}</p>
-                  <p className={styles.ingredient__name}>{ingredient.name}</p>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section className={styles.method__container}>
-            <h2 className={styles.subtitle}>Let's get cooking!</h2>
-            <div className={styles.method}>
-              {recipe.method}
-            </div>
-          </section>
+        <div className={styles.data}>
+          <div className={styles.img}>
+            <Image src="/images/recipe.jpg" alt="" width={360} height={240} />
+          </div>
+          <h1 className={styles.title}>{recipe.name}</h1>
+          <ul className={styles.extra}>
+            <li className={styles.extra__item} key="time">
+              <Image className={styles.extra__img} src="/images/icon-time.svg" alt="" width={40} height={40} />
+              <p className={styles.extra__txt}>{recipe.time} min.</p>
+            </li>
+            <li className={styles.extra__item} key="servings">
+              <Image className={styles.extra__img} src="/images/icon-serves.svg" alt="" width={40} height={40} />
+              <p className={styles.extra__txt}>{recipe.servings} serves</p>
+            </li>
+          </ul>
+          <div className={styles.info}>
+            <section className={styles.ingredients__container}>
+              <h2 className={styles.subtitle}>What you will need</h2>
+              <ul className={styles.ingredients}>
+                {ingredients.map(ingredient => (
+                  <li className={styles.ingredient} key={ingredient.name}>
+                    <p className={styles.ingredient__amount}>{ingredient.amount}{ingredient.unit.abbrevation}</p>
+                    <p className={styles.ingredient__name}>{ingredient.amount === 1 ? ingredient.name : ingredient.plural}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+            <section className={styles.method__container}>
+              <h2 className={styles.subtitle}>Let's get cooking!</h2>
+              <div className={styles.method}>
+                {recipe.method}
+              </div>
+            </section>
+          </div>
         </div>
+        <div></div>
       </main>
     </div>
   );

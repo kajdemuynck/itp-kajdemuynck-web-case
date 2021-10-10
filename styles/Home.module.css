@@ -7,10 +7,6 @@
   padding: var(--marginSmall);
   margin: 0 auto;
   display: grid;
-
-  /* @media (--only-m-screen) {
-    padding: var(--marginMedium);
-    } */
 }
 
 .title {
