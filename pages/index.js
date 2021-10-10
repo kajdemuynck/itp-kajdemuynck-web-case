@@ -7,11 +7,12 @@ const Home = () => {
   // testdata
   const data = [{
     name: 'Spaghetti bolognese',
-    image: 'vercel.svg',
+    image: 'images/recipe.jpg',
     ingredients: ['onion', 'salt', 'pepper']
   }];
 
   const sortOptions = ['az', 'za', 'time'];
+  const [sortSelected, setSortSelected] = useState(0);
   const [inputSearch, setInputSearch] = useState('');
 
   // When the user types in the searchbar
@@ -19,6 +20,13 @@ const Home = () => {
     const value = e.currentTarget.value;
     setInputSearch(value);
   }
+
+  // Changing the order of the recipes in the list
+  const handleClickSort = () => {
+    let value = sortSelected + 1;
+    value %= sortOptions.length;
+    setSortSelected(value);
+  };
 
   return (
     <div className={styles.container}>
@@ -36,14 +44,14 @@ const Home = () => {
         </h1>
         
         {/* Searchbar */}
-        <input type="search" value={inputSearch} onChange={handleInputSearch} />
+        <input className={styles.searchbar} type="search" value={inputSearch} onChange={handleInputSearch} placeholder="Search" />
 
         {/* Recommended */}
-        <section className={styles.section}>
+        <section className={styles.recommended__container}>
           <h2 className={styles.subtitle}>Recommended</h2>
           <article className={styles.recommended__item}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-            <div>
+            <Image src="/images/recipe.jpg" alt="Recipe" width={360} height={240} />
+            <div className={styles.recommended__info}>
               <h3 className={styles.rotd__title}>Recipe of the day</h3>
               <p className={styles.rotd__name}>Spaghetti bolognese</p>
             </div>
@@ -51,19 +59,21 @@ const Home = () => {
         </section>
 
         {/* Recipes */}
-        <section className={styles.section}>
-          <div className={styles.subtitle__wrapper}>
+        <section className={styles.recipes__container}>
+          <div className={styles.subtitle__container}>
             <h2 className={styles.subtitle}>Recipes</h2>
             <div className={styles.section__options}>
-              <button className={styles.btn__sort}>
-                <Image src="/vercel.svg" alt="sort" width={32} height={32} />
+              <button className={styles.btn__sort} onClick={handleClickSort}>
+                <Image src={`/images/icon-sort-${sortOptions[sortSelected]}.svg`} alt="sort" width={32} height={32} />
               </button>
             </div>
           </div>
           <ul className={styles.recipes}>
             {data.map((recipe, index) => (
               <li className={styles.recipe} key={index}>
-                <Image className={styles.recipe__img} src={`/${recipe.image}`} alt="recipe" width={80} height={80} />
+                <div className={styles.recipe__img}>
+                  <Image src={`/${recipe.image}`} alt="recipe" width={80} height={80} />
+                </div>
                 <p className={styles.recipe__name}>{recipe.name}</p>
                 <p className={styles.recipe__ingredients}>{recipe.ingredients.join(', ')}</p>
               </li>
