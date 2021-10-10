@@ -109,7 +109,19 @@
 }
 
 .ingredient__amount {
-  width: 6rem;
+  width: 9rem;
+}
+
+.method > ol {
+  font-weight: 300;
+  padding-left: 2.4rem;
+  list-style-type: decimal;
+  list-style-position: outside;
+  color: #808080;
+}
+
+.method > ol > li {
+  margin-bottom: 1rem;
 }
 
 @media (min-width: 700px) {
@@ -165,11 +177,16 @@
   .data {
     display: grid;
     grid-template-columns: 39vw auto;
+    grid-template-rows: repeat(2, min-content) 1fr;
     grid-gap: 0 2rem;
     grid-template-areas: 
       "img info"
       "title info"
       "extra info";
+  }
+
+  .data > * {
+    height: fit-content;
   }
 
   .img > div {

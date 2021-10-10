@@ -6,6 +6,7 @@ import { request } from "../lib/datocms";
 import ListOfRecipes from '../components/ListOfRecipes';
 import Recommended from '../components/Recommended';
 
+let randomRecipe = false;
 const HOMEPAGE_QUERY = `query HomePage {
   allRecipes(orderBy: name_ASC) {
     id
@@ -52,7 +53,7 @@ export const getStaticProps = async () => {
 
 const Home = ({ data }) => {
   const [inputSearch, setInputSearch] = useState('');
-  const randomRecipe = data.allRecipes[Math.floor(Math.random() * data.allRecipes.length)];
+  if (!randomRecipe) randomRecipe = data.allRecipes[Math.floor(Math.random() * data.allRecipes.length)];
 
   // Fetching a large image from one of the recipes
   // useEffect(() => {

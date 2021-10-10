@@ -19,6 +19,7 @@
 .title {
   color: var(--clrSalmon);
   margin-bottom: 3rem;
+  line-height: 1;
 }
 
 .title__start {
