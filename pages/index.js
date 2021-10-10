@@ -1,16 +1,30 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { request } from "../lib/datocms";
 import ListOfRecipes from '../components/ListOfRecipes';
+import Recommended from '../components/Recommended';
 
 const HOMEPAGE_QUERY = `query HomePage {
-  allRecipes(orderBy: title_ASC) {
+  allRecipes(orderBy: name_ASC) {
+    id
+    name
     slug
-    title
     image {
-      responsiveImage(imgixParams: {h: "80", w: "80", fit: crop}) {
+      imageSmall: responsiveImage(imgixParams: {w: "80", h: "80", fit: crop}) {
+        src
+        srcSet
+        webpSrcSet
+        width
+        title
+        height
+        base64
+        alt
+        aspectRatio
+        sizes
+      }
+      imageBig: responsiveImage(imgixParams: {w: "480", h: "320", fit: crop}) {
         src
         srcSet
         webpSrcSet
@@ -28,17 +42,49 @@ const HOMEPAGE_QUERY = `query HomePage {
 
 export const getStaticProps = async () => {
   const data = await request({
-    query: HOMEPAGE_QUERY,
-    variables: { limit: 10 }
+    query: HOMEPAGE_QUERY
   });
+
   return {
     props: { data }
   };
 }
 
 const Home = ({ data }) => {
-  console.log(data);
   const [inputSearch, setInputSearch] = useState('');
+  const randomRecipe = data.allRecipes[Math.floor(Math.random() * data.allRecipes.length)];
+
+  // Fetching a large image from one of the recipes
+  // useEffect(() => {
+  //   const fetchRandomRecipeImg = async () => {
+  //     if (!randomRecipe) {
+  //       const randomRecipe = data.allRecipes[Math.floor(Math.random() * data.allRecipes.length)];
+  //       const copy = {...randomRecipe};
+  //       fetch('https://graphql.datocms.com/',
+  //         {
+  //           method: 'POST',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             'Accept': 'application/json',
+  //             'Authorization': `Bearer ${process.env.NEXT_DATOCMS_API_TOKEN}`,
+  //           },
+  //           body: JSON.stringify({
+  //             query: `allRecipes(filter: {id: {eq: ${randomRecipe.id}}}) { image { url } }`
+  //           })
+  //         }
+  //       )
+  //       .then(res => res.json())
+  //       .then((res) => {
+  //         copy.imageUrl = res.data;
+  //         setRandomRecipe(copy);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //     }
+  //   };
+  //   fetchRandomRecipeImg();
+  // }, [randomRecipe]);
 
   // When the user types in the searchbar
   const handleInputSearch = e => {
@@ -65,16 +111,7 @@ const Home = ({ data }) => {
         <input className={styles.searchbar} type="search" value={inputSearch} onChange={handleInputSearch} placeholder="Search" />
 
         {/* Recommended */}
-        <section className={styles.recommended__container}>
-          <h2 className={styles.subtitle}>Recommended</h2>
-          <article className={styles.recommended__item}>
-            <Image src="/images/recipe.jpg" alt="Recipe" width={360} height={240} />
-            <div className={styles.recommended__info}>
-              <h3 className={styles.rotd__title}>Recipe of the day</h3>
-              <p className={styles.rotd__name}>Spaghetti bolognese</p>
-            </div>
-          </article>
-        </section>
+        <Recommended recipe={randomRecipe} />
 
         {/* Recipes */}
         <ListOfRecipes data={data} />

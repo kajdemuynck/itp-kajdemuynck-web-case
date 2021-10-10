@@ -1,0 +1,52 @@
+@value tokens: "./Vars.module.css";
+
+.subtitle {
+  composes: subtitle from './Vars.module.css';
+}
+
+.subtitle__container {
+  composes: subtitle__container from './Vars.module.css';
+}
+
+.recommended__item {
+  cursor: pointer;
+  display: grid;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.recommended__item > * {
+  grid-column: 1;
+  grid-row: 1;
+  width: calc(100vw - (var(--marginSmall) * 2));
+  height: calc(67vw - (var(--marginSmall) * 2));
+}
+
+.recommended__info {
+  z-index: 2;
+  padding: 1.2rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  color: white;
+  background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.25) 75%, rgba(0,0,0,0.6) 100%);
+}
+
+.rotd__title {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.rotd__name {
+  font-size: 2.4rem;
+  font-weight: 600;
+}
+
+@media (min-width: 520px) {
+  .recommended__item > * {
+    width: 48rem;
+    height: 32rem;
+  }
+}
