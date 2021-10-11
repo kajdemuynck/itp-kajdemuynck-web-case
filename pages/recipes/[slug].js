@@ -87,7 +87,6 @@ export const getStaticPaths = async () => {
 
 const Recipe = ({ data }) => {
   const recipe = data.allRecipes[0];
-  console.log(recipe);
   
   return (
     <div className={styles.container}>
