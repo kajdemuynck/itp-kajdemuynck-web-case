@@ -18,7 +18,8 @@
   grid-row: 1;
 }
 
-.btn__back {
+.btn__back,
+.btn__back:visited {
   cursor: pointer;
   z-index: 2;
   margin-top: var(--marginSmall);
@@ -32,10 +33,19 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: 3.2rem;
+  transform: scale(1);
+  transition: all .3s ease-in-out;
 }
 
 .btn__back:hover {
   background-color: #E0E0E0;
+  transform: scale(1.1);
+}
+
+.btn__back:active {
+  background-color: #bababa;
+  transform: scale(1.05);
+  transition: none;
 }
 
 .img {

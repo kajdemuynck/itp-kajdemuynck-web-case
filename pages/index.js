@@ -71,6 +71,7 @@ export const getStaticProps = async () => {
 
 const Home = ({ data }) => {
   const [inputSearch, setInputSearch] = useState('');
+  const searchPlaceholders = [`What do you fancy?`, `What's in your fridge?`];
   if (!randomRecipe) randomRecipe = data[Math.floor(Math.random() * data.length)];
 
   // When the user types in the searchbar
@@ -95,7 +96,7 @@ const Home = ({ data }) => {
         </h1>
         
         {/* Searchbar */}
-        <input className={styles.searchbar} type="search" value={inputSearch} onChange={handleInputSearch} placeholder="Search" />
+        <input className={styles.searchbar} type="search" value={inputSearch} onChange={handleInputSearch} placeholder={searchPlaceholders[Math.floor(Math.random() * searchPlaceholders.length)]} />
 
         {/* Recommended */}
         <Recommended recipe={randomRecipe} />

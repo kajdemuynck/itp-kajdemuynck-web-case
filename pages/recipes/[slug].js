@@ -41,7 +41,7 @@ const RECIPE_QUERY = `query GetRecipe($slug: String) {
 }`;
 
 const INGREDIENTS_QUERY = `query GetIngredientsFromRecipe($id: ItemId) {
-  allRecipeIngredients(filter: { recipe: { eq: $id } }) {
+  allRecipeIngredients(filter: { recipe: { eq: $id } }, orderBy: amount_ASC) {
     amount
     ingredient {
       name

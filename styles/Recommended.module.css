@@ -14,6 +14,27 @@
   border-radius: 1.2rem;
   overflow: hidden;
   width: fit-content;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,0.2);
+  transform: scale(1);
+  transition: transform .3s ease-in-out;
+}
+
+.recommended__item:hover {
+  transform: scale(1.025);
+}
+
+.recommended__item:hover .recommended__info {
+  background-color: rgba(0,0,0,0.25);
+}
+
+.recommended__item:active {
+  transform: scale(1.015);
+  transition: none;
+}
+
+.recommended__item:active .recommended__info {
+  background-color: rgba(0,0,0,0.5);
+  transition: none;
 }
 
 .recommended__item > * {
@@ -31,7 +52,9 @@
   justify-content: flex-end;
   align-items: flex-start;
   color: white;
+  background-color: rgba(0,0,0,0);
   background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.25) 75%, rgba(0,0,0,0.6) 100%);
+  transition: background-color .3s ease-in-out;
 }
 
 .rotd__title {

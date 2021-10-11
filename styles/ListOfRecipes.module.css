@@ -29,7 +29,8 @@
   grid-gap: 2rem;
 }
 
-.recipe {
+.recipe,
+.recipe:visited {
   cursor: pointer;
   width: 100%;
   height: 8rem;
@@ -39,11 +40,21 @@
   overflow: hidden;
   border-radius: 1.2rem;
   box-shadow: 0 .5rem 1rem rgba(0,0,0,0.2);
+  transform: scale(1);
+  transition: all .3s ease-in-out;
 }
 
 .recipe:hover {
   color: white;
   background-color: var(--clrSalmon);
+  transform: scale(1.025);
+}
+
+.recipe:active {
+  color: white;
+  background-color: #a73d3d;
+  transform: scale(1.015);
+  transition: none;
 }
 
 .recipe__img {
@@ -58,10 +69,14 @@
 }
 
 .recipe__name {
+  padding-right: 2rem;
   align-self: end;
   font-size: 2rem;
   font-weight: 600;
+  text-transform: capitalize;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   margin-bottom: 1rem;
 }
 

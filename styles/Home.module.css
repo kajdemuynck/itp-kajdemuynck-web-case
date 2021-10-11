@@ -63,6 +63,17 @@
   color: #C0C0C0;
 }
 
+.searchbar::-webkit-search-cancel-button{
+  -webkit-appearance: none;
+  position:relative;
+  height: 2.4rem;
+  width: 2.4rem;
+  background-image: url('../public/images/icon-search-cancel.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 2.4rem;
+}
+
 .footer {
   margin-top: auto;
   align-self: flex-end;
