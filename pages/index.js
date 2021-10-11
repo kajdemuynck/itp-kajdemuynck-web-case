@@ -1,7 +1,6 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { request } from "../lib/datocms";
 import ListOfRecipes from '../components/ListOfRecipes';
 import Recommended from '../components/Recommended';
@@ -12,6 +11,7 @@ const HOMEPAGE_QUERY = `query HomePage {
     id
     name
     slug
+    time
     image {
       imageSmall: responsiveImage(imgixParams: {w: "80", h: "80", fit: crop}) {
         src
@@ -41,10 +41,28 @@ const HOMEPAGE_QUERY = `query HomePage {
   }
 }`;
 
+const INGREDIENTS_QUERY = `query GetIngredientsFromRecipe($id: ItemId) {
+  allRecipeIngredients(filter: { recipe: { eq: $id } }) {
+    ingredient {
+      name
+      plural
+    }
+  }
+}`;
+
 export const getStaticProps = async () => {
-  const data = await request({
+  const recipes = await request({
     query: HOMEPAGE_QUERY
   });
+
+  const data = [...recipes.allRecipes];
+  for (const recipe of recipes.allRecipes) {
+    const ingredients = await request({
+      query: INGREDIENTS_QUERY,
+      variables: { id: recipe.id }
+    });
+    recipe.ingredients = ingredients.allRecipeIngredients.map(item => item.ingredient);
+  }
 
   return {
     props: { data }
@@ -53,39 +71,7 @@ export const getStaticProps = async () => {
 
 const Home = ({ data }) => {
   const [inputSearch, setInputSearch] = useState('');
-  if (!randomRecipe) randomRecipe = data.allRecipes[Math.floor(Math.random() * data.allRecipes.length)];
-
-  // Fetching a large image from one of the recipes
-  // useEffect(() => {
-  //   const fetchRandomRecipeImg = async () => {
-  //     if (!randomRecipe) {
-  //       const randomRecipe = data.allRecipes[Math.floor(Math.random() * data.allRecipes.length)];
-  //       const copy = {...randomRecipe};
-  //       fetch('https://graphql.datocms.com/',
-  //         {
-  //           method: 'POST',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             'Accept': 'application/json',
-  //             'Authorization': `Bearer ${process.env.NEXT_DATOCMS_API_TOKEN}`,
-  //           },
-  //           body: JSON.stringify({
-  //             query: `allRecipes(filter: {id: {eq: ${randomRecipe.id}}}) { image { url } }`
-  //           })
-  //         }
-  //       )
-  //       .then(res => res.json())
-  //       .then((res) => {
-  //         copy.imageUrl = res.data;
-  //         setRandomRecipe(copy);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //     }
-  //   };
-  //   fetchRandomRecipeImg();
-  // }, [randomRecipe]);
+  if (!randomRecipe) randomRecipe = data[Math.floor(Math.random() * data.length)];
 
   // When the user types in the searchbar
   const handleInputSearch = e => {
@@ -115,7 +101,7 @@ const Home = ({ data }) => {
         <Recommended recipe={randomRecipe} />
 
         {/* Recipes */}
-        <ListOfRecipes data={data} />
+        <ListOfRecipes data={data} inputSearch={inputSearch} />
       </main>
 
       {/* Footer */}
